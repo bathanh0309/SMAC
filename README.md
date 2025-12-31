@@ -2,6 +2,12 @@
 
 Hệ thống phát hiện người tự động điều khiển cổng sử dụng YOLO11.
 
+## Demo
+
+https://github.com/user-attachments/assets/video.mp4
+
+<video src="database/video.mp4" controls width="100%"></video>
+
 ## Cấu trúc
 
 ```

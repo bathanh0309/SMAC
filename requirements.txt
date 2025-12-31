@@ -2,7 +2,7 @@ opencv-python
 requests
 flask
 ultralytics
-numpy
+numpy < 2.0.0
 pandas
 matplotlib
 seaborn
