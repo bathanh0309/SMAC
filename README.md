@@ -1,6 +1,28 @@
-# SMAC - Person Detection Gate System
+# SMAC - Security Monitoring Access Control
 
-Hệ thống phát hiện người tự động điều khiển cổng sử dụng YOLO11 và MQTT.
+Hệ thống phát hiện người tự động điều khiển cổng sử dụng YOLO11.
+
+## Cấu trúc
+
+```
+SMAC/
+├── AI_model/           # YOLO model (yolo11n.pt)
+├── backend/            # Node.js server
+├── frontend/           # Web dashboard
+├── src/                # Python detection system
+│   ├── detection_system.py
+│   ├── gate_controller.py
+│   ├── database.py
+│   └── telegram_helper.py
+├── database/           # SQLite databases
+├── data_images/        # Detection images
+├── run.bat             # One-click launch
+└── requirements.txt
+```
+
+## Database Analytics
+
+![SMAC Analytics](database/smac_analytics.png)
 
 ## Tính năng
 
@@ -42,24 +64,6 @@ node server.js
 - **Python Detection Server**: http://localhost:8000
 - **Web Dashboard**: http://localhost:3000
 
-## Cấu trúc
-
-```
-SMAC/
-├── AI_model/           # YOLO model (yolo11n.pt)
-├── backend/            # Node.js server
-├── frontend/           # Web dashboard
-├── src/                # Python detection system
-│   ├── detection_system.py
-│   ├── gate_controller.py
-│   ├── database.py
-│   └── telegram_helper.py
-├── database/           # SQLite databases
-├── data_images/        # Detection images
-├── run.bat             # One-click launch
-└── requirements.txt
-```
-
 ## Cấu hình Telegram (tùy chọn)
 
 Set environment variables:
@@ -75,4 +79,3 @@ Hoặc sửa trực tiếp trong `src/telegram_helper.py`.
 
 - **OPEN**: Phát hiện người liên tục >= 5 giây
 - **CLOSE**: Không có người >= 2 giây (debounce)
-- MQTT publish tới `gate/status` với payload `{"in": "ON/OFF"}`
