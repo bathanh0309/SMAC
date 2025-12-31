@@ -20,6 +20,15 @@ SMAC/
 └── requirements.txt
 ```
 
+### Mô tả các file trong `src/`
+
+| File | Chức năng |
+|------|-----------|
+| `detection_system.py` | **Module chính** - Xử lý webcam realtime, YOLO11 person detection, Flask API streaming (port 8000), tích hợp gate controller và Telegram alerts |
+| `gate_controller.py` | **State Machine** - Điều khiển cổng với 2 trạng thái (CLOSED/OPEN). Mở cổng sau 10s phát hiện người liên tục (conf ≥ 0.7), đóng sau 0.5s không có người |
+| `database.py` | **SQLite Database** - Lưu trữ log phát hiện người (person_count, datetime, confidence, image_path). Hỗ trợ thống kê và truy vấn |
+| `telegram_helper.py` | **Telegram Bot** - Gửi thông báo và ảnh cảnh báo khi phát hiện người. Hỗ trợ auto-detect Chat ID |
+
 ## Database Analytics
 
 ![SMAC Analytics](database/smac_analytics.png)
