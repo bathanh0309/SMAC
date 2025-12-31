@@ -4,9 +4,9 @@ Hệ thống phát hiện người tự động điều khiển cổng sử dụ
 
 ## Demo
 
-https://github.com/user-attachments/assets/video.mp4
+https://github.com/user-attachments/assets/demo1.mp4
 
-<video src="database/video.mp4" controls width="100%"></video>
+<video src="database/demo1.mp4" controls width="100%"></video>
 
 ## Cấu trúc
 
