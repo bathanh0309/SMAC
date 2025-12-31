@@ -3,6 +3,9 @@
 Hệ thống phát hiện người tự động điều khiển cổng sử dụng YOLO11.
 
 
+https://github.com/user-attachments/assets/0690f03e-9104-4892-8d91-02bf9c63523b
+
+
 ## Cấu trúc
 
 ```
