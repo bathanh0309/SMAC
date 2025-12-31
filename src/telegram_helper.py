@@ -1,64 +1,94 @@
 """
 Telegram Helper Module
-Gửi thông báo và ảnh đến Telegram Bot
+Gui thong bao va anh den Telegram Bot
+Handles empty credentials gracefully
 """
+import os
 import requests
 from datetime import datetime
 
 
 class TelegramBot:
-    def __init__(self, token):
-        self.token = token
-        self.base_url = f"https://api.telegram.org/bot{token}"
-        self.chat_id = None
+    def __init__(self, token=None, chat_id=None):
+        """
+        Initialize Telegram bot
+        
+        Args:
+            token: Bot token (or set TELEGRAM_BOT_TOKEN env var)
+            chat_id: Chat ID (or set TELEGRAM_CHAT_ID env var)
+        """
+        # Get from env or params (env takes priority)
+        self.token = os.environ.get('TELEGRAM_BOT_TOKEN', token or '')
+        self.chat_id = os.environ.get('TELEGRAM_CHAT_ID', chat_id or '')
+        
+        # Check if configured
+        self.is_configured = bool(self.token and self.chat_id)
+        
+        if self.is_configured:
+            self.base_url = f"https://api.telegram.org/bot{self.token}"
+            print(f"[Telegram] Configured (Chat ID: {self.chat_id})")
+        else:
+            self.base_url = None
+            if self.token and not self.chat_id:
+                print("[Telegram] Token set, auto-detecting chat_id...")
+            else:
+                print("[Telegram] Not configured - notifications disabled")
+    
+    def _check_configured(self) -> bool:
+        """Check if bot is configured"""
+        if not self.is_configured:
+            return False
+        return True
     
     def get_chat_id_from_updates(self):
-        """Lấy Chat ID từ tin nhắn gần nhất"""
+        """Lay Chat ID tu tin nhan gan nhat"""
+        if not self.token:
+            return None
+        
         try:
-            url = f"{self.base_url}/getUpdates"
+            url = f"https://api.telegram.org/bot{self.token}/getUpdates"
             response = requests.get(url, timeout=5)
             data = response.json()
             
             if data.get('ok') and data.get('result'):
-                # Lấy chat_id từ tin nhắn mới nhất
                 for update in reversed(data['result']):
                     if 'message' in update:
                         chat_id = update['message']['chat']['id']
-                        return chat_id
+                        return str(chat_id)
             return None
         except Exception as e:
-            print(f"⚠️  Lỗi lấy Chat ID: {e}")
+            print(f"[Telegram] Error getting Chat ID: {e}")
             return None
     
     def send_message(self, message, chat_id=None):
-        """Gửi tin nhắn text"""
-        if chat_id is None:
-            chat_id = self.chat_id
-        
-        if chat_id is None:
-            print("❌ Chưa có Chat ID! Gửi /start cho bot trước.")
+        """Gui tin nhan text"""
+        if not self._check_configured():
             return False
+        
+        target_chat = chat_id or self.chat_id
         
         try:
             url = f"{self.base_url}/sendMessage"
             data = {
-                'chat_id': chat_id,
+                'chat_id': target_chat,
                 'text': message,
                 'parse_mode': 'HTML'
             }
             response = requests.post(url, data=data, timeout=5)
             return response.json().get('ok', False)
         except Exception as e:
-            print(f"⚠️  Lỗi gửi tin nhắn: {e}")
+            print(f"[Telegram] Error sending message: {e}")
             return False
     
     def send_photo(self, image_path, caption="", chat_id=None):
-        """Gửi ảnh với caption"""
-        if chat_id is None:
-            chat_id = self.chat_id
+        """Gui anh voi caption"""
+        if not self._check_configured():
+            return False
         
-        if chat_id is None:
-            print("❌ Chưa có Chat ID! Gửi /start cho bot trước.")
+        target_chat = chat_id or self.chat_id
+        
+        if not os.path.exists(image_path):
+            print(f"[Telegram] Image not found: {image_path}")
             return False
         
         try:
@@ -66,44 +96,54 @@ class TelegramBot:
             with open(image_path, 'rb') as photo:
                 files = {'photo': photo}
                 data = {
-                    'chat_id': chat_id,
+                    'chat_id': target_chat,
                     'caption': caption,
                     'parse_mode': 'HTML'
                 }
                 response = requests.post(url, data=data, files=files, timeout=10)
-            return response.json().get('ok', False)
+            result = response.json()
+            if result.get('ok'):
+                print(f"[Telegram] Photo sent successfully")
+                return True
+            else:
+                print(f"[Telegram] Failed: {result.get('description', 'Unknown error')}")
+                return False
         except Exception as e:
-            print(f"⚠️  Lỗi gửi ảnh: {e}")
+            print(f"[Telegram] Error sending photo: {e}")
             return False
     
     def send_detection_alert(self, image_path, num_people, confidence, custom_msg=None):
         """Gửi thông báo phát hiện người kèm ảnh"""
+        if not self._check_configured():
+            return False
+        
         now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         
-        if custom_msg:
-            caption = (
-                f"{custom_msg}\n"
-                f"🕒 {now}\n"
-                f"📊 Confidence: {confidence:.2f}"
-            )
-        else:
-            caption = (
-                f"🚨 <b>Phát hiện {num_people} người!</b>\n"
-                f"🕒 {now}\n"
-                f"📊 Confidence: {confidence:.2f}"
-            )
+        # Format with Vietnamese diacritics and warning icon
+        caption = (
+            f"⚠️ <b>Phát hiện {num_people} người (Conf: {confidence:.2f})</b>\n"
+            f"🕐 Time: {now}"
+        )
         
         return self.send_photo(image_path, caption)
 
 
-# Khởi tạo bot với token
+# ============ CONFIGURATION ============
+# Your Telegram Bot Token
 TELEGRAM_TOKEN = "8383210571:AAEfg3IIBtTVI_PcmfJ4w5uYgeM8thWqTPs"
-telegram_bot = TelegramBot(TELEGRAM_TOKEN)
 
-# Tự động lấy Chat ID
-auto_chat_id = telegram_bot.get_chat_id_from_updates()
-if auto_chat_id:
-    telegram_bot.chat_id = auto_chat_id
-    print(f"✅ Đã tìm thấy Chat ID: {auto_chat_id}")
-else:
-    print("⚠️  Chưa tìm thấy Chat ID. Vui lòng gửi /start cho @bathanh0309_bot")
+# Chat ID from Telegram API
+TELEGRAM_CHAT_ID = "7827433045"
+
+# Initialize bot
+telegram_bot = TelegramBot(token=TELEGRAM_TOKEN, chat_id=TELEGRAM_CHAT_ID)
+
+# Auto-detect chat_id if token is set but chat_id is empty
+if telegram_bot.token and not telegram_bot.chat_id:
+    auto_chat_id = telegram_bot.get_chat_id_from_updates()
+    if auto_chat_id:
+        telegram_bot.chat_id = auto_chat_id
+        telegram_bot.is_configured = True
+        print(f"[Telegram] Auto-detected Chat ID: {auto_chat_id}")
+    else:
+        print("[Telegram] Send /start to @bathanh0309_bot first, then restart")

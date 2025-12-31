@@ -1,243 +1,175 @@
 """
 Detection System Module
-Hệ thống phát hiện người sử dụng YOLO11 + Flask + Telegram
+Person detection using YOLO11 + Flask streaming + Gate Control
 """
 import cv2
 import time
 import os
+import sys
 from datetime import datetime
-from ultralytics import YOLO
-from flask import Flask, Response
+from flask import Flask, Response, jsonify
+from flask_cors import CORS
 import threading
+import logging
+
+# Add src to path for imports
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from ultralytics import YOLO
+from gate_controller import gate_controller
 from telegram_helper import telegram_bot
 from database import db
 
 
 class PersonDetectionSystem:
+    """Main detection system with webcam, YOLO, Flask streaming, and gate control"""
+    
     def __init__(self):
-        """Khởi tạo hệ thống"""
-        print("🔄 Đang khởi tạo hệ thống phát hiện...")
+        """Initialize the detection system"""
+        print("[INIT] Dang khoi tao he thong phat hien nguoi...")
+        
+        # Model path configuration
+        self.MODEL_PATH = self._find_model()
         
         # Load YOLO model
-        print("🔄 Đang load model Ba Thanh...")
-        # Đường dẫn model train xong
-        custom_model_path = r"runs\detect\bathanh_model\weights\best.pt"
+        print(f"[INIT] Dang load model: {self.MODEL_PATH}")
+        self.model = YOLO(self.MODEL_PATH)
+        print(f"[INIT] Da load model YOLO11n")
         
-        if os.path.exists(custom_model_path):
-            self.model = YOLO(custom_model_path)
-            print(f"✅ Đã load model: {custom_model_path}")
-            self.is_custom_model = True
-        elif os.path.exists("bathanh.pt"):
-             self.model = YOLO("bathanh.pt")
-             print("✅ Đã load bathanh.pt")
-             self.is_custom_model = True
-        else:
-            self.model = YOLO('yolo11n.pt')
-            print("⚠️ Không tìm thấy model custom, dùng tạm yolo11n.pt")
-            self.is_custom_model = False
+        # Detection configuration
+        self.CONFIDENCE_THRESHOLD = 0.7  # Confidence >= 0.7 to light up
+        self.PERSON_CLASS_ID = 0  # Class 0 = person in COCO
+        self.SAVE_DIR = os.path.join(os.path.dirname(__file__), '..', 'database', 'data_images')
         
-        # Cấu hình
-        self.CONFIDENCE_THRESHOLD = 0.5
-        self.PERSON_CLASS_ID = 0  # Class ID của 'person' trong COCO
-        self.RESET_TIME = 5  # Thời gian reset (giây)
-        self.SAVE_DIR = "data_images"
-        
-        # Tạo thư mục lưu ảnh
+        # Create save directory if not exists
         if not os.path.exists(self.SAVE_DIR):
             os.makedirs(self.SAVE_DIR)
-            print(f"✅ Đã tạo thư mục: {self.SAVE_DIR}")
+            print(f"[INIT] Đã tạo thư mục: {self.SAVE_DIR}")
         
-        # Biến trạng thái
-        self.person_detected = False
-        self.last_detection_time = 0
+        # Frame state
         self.frame = None
-        self.latest_frame_lock = threading.Lock()
+        self.frame_lock = threading.Lock()
+        self.running = False
         
-        # Flask app
+        # Detection state
+        self.last_save_time = 0
+        self.SAVE_INTERVAL = 10  # Save image every 10 seconds when person detected
+        self.gate_opened_notified = False  # Track if we've sent Telegram for this OPEN
+        
+        # Realtime detection state for API
+        self.current_person_detected = False
+        self.current_person_count = 0
+        self.current_confidence = 0.0
+        
+        # Telegram spam prevention
+        self.last_telegram_time = 0
+        self.TELEGRAM_COOLDOWN = 30  # seconds between telegram messages
+        self.telegram_sent_for_detection = False  # Track if telegram sent for current detection
+        
+        # Flask app with logging disabled and CORS enabled
         self.app = Flask(__name__)
-        self.setup_flask_routes()
-
-    # ... (setup_flask_routes giữ nguyên) ...
-
-    def process_frame(self, frame):
-        """Xử lý frame: detect + draw boxes"""
-        results = self.model(frame, verbose=False)
+        CORS(self.app)  # Allow cross-origin requests
+        self.app.logger.disabled = True
+        log = logging.getLogger('werkzeug')
+        log.disabled = True
+        self._setup_routes()
         
-        person_count = 0
-        max_confidence = 0
+        # Gate controller reference
+        self.gate = gate_controller
         
-        for result in results:
-            boxes = result.boxes
-            for box in boxes:
-                class_id = int(box.cls[0])
-                confidence = float(box.conf[0])
-                
-                # Class 0 là person (hoặc Ba Thanh trong custom model)
-                if class_id == 0 and confidence >= self.CONFIDENCE_THRESHOLD:
-                    person_count += 1
-                    max_confidence = max(max_confidence, confidence)
-                    
-                    # Vẽ bounding box
-                    x1, y1, x2, y2 = map(int, box.xyxy[0])
-                    cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                    
-                    # Vẽ label
-                    label_name = "Ba Thanh" if self.is_custom_model else "Person"
-                    label = f"{label_name} {confidence:.2f}"
-                    cv2.putText(frame, label, (x1, y1 - 10),
-                               cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+        print("[INIT] He thong da san sang")
+    
+    def _find_model(self) -> str:
+        """Find YOLO model file"""
+        # Priority order for model paths
+        paths = [
+            "AI_model/yolo11n.pt",
+            "../AI_model/yolo11n.pt",
+            "yolo11n.pt",
+            os.path.join(os.path.dirname(__file__), "..", "AI_model", "yolo11n.pt"),
+        ]
         
-        # Vẽ thông tin trên frame
-        current_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        cv2.putText(frame, f"Time: {current_time}", (10, 30),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
-        target_name = "Ba Thanh" if self.is_custom_model else "person"
-        cv2.putText(frame, f"Detected: {person_count} {target_name}", (10, 60),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+        for path in paths:
+            if os.path.exists(path):
+                return path
         
-        return frame, person_count, max_confidence
-
-    # ... (server methods) ...
-
-                if person_count > 0:
-                    if not self.person_detected:
-                        # Phát hiện lần đầu
-                        self.person_detected = True
-                        self.last_detection_time = current_time
-                        
-                        target_name = "BÁ THÀNH" if self.is_custom_model else "NGƯỜI"
-                        print(f"🚨 PHÁT HIỆN {target_name}! (Confidence: {confidence:.2f})")
-                        self.save_detection_image(processed_frame, person_count, confidence)
-                    
-                    elif current_time - self.last_detection_time >= self.RESET_TIME:
-                        # Đã qua RESET_TIME, lưu lại
-                        self.last_detection_time = current_time
-                        target_name = "BÁ THÀNH" if self.is_custom_model else "NGƯỜI"
-                        print(f"🚨 PHÁT HIỆN {target_name}! (Confidence: {confidence:.2f})")
-                        self.save_detection_image(processed_frame, person_count, confidence)
-                else:
-                    # Reset nếu không còn người
-                    if self.person_detected:
-                        self.person_detected = False
-                        print("✅ Không còn phát hiện")
-        
-    def setup_flask_routes(self):
-        """Thiết lập Flask routes"""
-        @self.app.route('/')
-        def index():
-            return """
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>🎥 Person Detection System</title>
-                <style>
-                    body {
-                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        min-height: 100vh;
-                        margin: 0;
-                    }
-                    .container {
-                        background: white;
-                        border-radius: 20px;
-                        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-                        padding: 30px;
-                        text-align: center;
-                        max-width: 900px;
-                    }
-                    h1 {
-                        color: #667eea;
-                        margin-bottom: 20px;
-                    }
-                    img {
-                        width: 100%;
-                        border-radius: 10px;
-                        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-                    }
-                    .info {
-                        margin-top: 20px;
-                        padding: 15px;
-                        background: #f0f4ff;
-                        border-radius: 10px;
-                        color: #333;
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="container">
-                    <h1>🎥 Person Detection System</h1>
-                    <img src="/video" alt="Live Stream">
-                    <div class="info">
-                        <p>✅ YOLO11 Real-time Detection</p>
-                        <p>📱 Telegram: @bathanh0309_bot</p>
-                        <p>🔄 Auto-save images every 5 seconds</p>
-                    </div>
-                </div>
-            </body>
-            </html>
-            """
+        # Default - let ultralytics download it
+        print("[WARN] Model khong tim thay, se tai tu dong...")
+        return "yolo11n.pt"
+    
+    def _setup_routes(self):
+        """Setup Flask routes - API endpoints only (frontend served by Node.js on port 3000)"""
         
         @self.app.route('/video')
         def video():
             return Response(
-                self.generate_frames(),
+                self._generate_frames(),
                 mimetype='multipart/x-mixed-replace; boundary=frame'
             )
+        
+        @self.app.route('/video_feed')
+        def video_feed():
+            """Alias for /video (compatibility with frontend)"""
+            return Response(
+                self._generate_frames(),
+                mimetype='multipart/x-mixed-replace; boundary=frame'
+            )
+        
+        @self.app.route('/api/status')
+        def api_status():
+            status = self.gate.get_status()
+            return jsonify({
+                "gate_state": status["state"],
+                "person_detected": self.current_person_detected,
+                "person_count": self.current_person_count,
+                "confidence": round(self.current_confidence, 2),
+                "person_duration": round(status["person_present_duration"], 1),
+                "countdown": self._get_countdown_display(),
+                "light_on": self.current_person_detected and self.current_confidence >= 0.7
+            })
+        
+        @self.app.route('/api/gate/open', methods=['POST'])
+        def api_gate_open():
+            self.gate.force_open()
+            return jsonify({"status": "success", "gate": "OPEN"})
+        
+        @self.app.route('/api/gate/close', methods=['POST'])
+        def api_gate_close():
+            self.gate.force_close()
+            return jsonify({"status": "success", "gate": "CLOSED"})
     
-    def generate_frames(self):
-        """Generator để stream frames qua Flask"""
+    def _get_countdown_display(self):
+        """Get countdown remaining time for frontend display"""
+        if self.gate.person_present_start is not None:
+            elapsed = time.time() - self.gate.person_present_start
+            remaining = max(0, self.gate.OPEN_DELAY - elapsed)
+            if remaining > 0 and self.gate.state == "CLOSED":
+                return round(remaining, 1)
+        return 0
+    
+    def _generate_frames(self):
+        """Generate frames for MJPEG streaming"""
         while True:
-            with self.latest_frame_lock:
+            with self.frame_lock:
                 if self.frame is None:
+                    time.sleep(0.03)
                     continue
                 frame_copy = self.frame.copy()
             
-            # Encode frame to JPEG
-            ret, buffer = cv2.imencode('.jpg', frame_copy)
+            ret, buffer = cv2.imencode('.jpg', frame_copy, [cv2.IMWRITE_JPEG_QUALITY, 80])
             if ret:
-                frame_bytes = buffer.tobytes()
                 yield (b'--frame\r\n'
-                       b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+                       b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
             
-            time.sleep(0.03)  # ~30 FPS
-    
-    def save_detection_image(self, frame, num_people, confidence):
-        """Lưu ảnh phát hiện với timestamp và lưu vào database"""
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        filename = f"person_{timestamp}.jpg"
-        filepath = os.path.join(self.SAVE_DIR, filename)
-        
-        cv2.imwrite(filepath, frame)
-        print(f"💾 Đã lưu: {filename}")
-        
-        # Lưu vào database
-        try:
-            db.add_detection(num_people, confidence, filepath)
-            print(f"💾 Đã lưu vào database")
-        except Exception as e:
-            print(f"⚠️  Lỗi lưu database: {e}")
-        
-        # Gửi Telegram
-        if telegram_bot.chat_id:
-            # Custom message
-            target_name = "BÁ THÀNH" if getattr(self, 'is_custom_model', False) else "NGƯỜI"
-            msg = f"🚨 PHÁT HIỆN {target_name}! ({confidence:.2f})"
-            
-            # Gửi ảnh kèm caption custom
-            success = telegram_bot.send_detection_alert(filepath, num_people, confidence, custom_msg=msg)
-            
-            if success:
-                print("✅ Đã gửi Telegram")
-            else:
-                print("⚠️  Không gửi được Telegram")
-        
-        return filepath
+            time.sleep(0.033)  # ~30 FPS
     
     def process_frame(self, frame):
-        """Xử lý frame: detect + draw boxes"""
+        """
+        Process a single frame: detect persons and draw bounding boxes
+        
+        Returns:
+            tuple: (processed_frame, person_count, max_confidence)
+        """
         results = self.model(frame, verbose=False)
         
         person_count = 0
@@ -249,117 +181,192 @@ class PersonDetectionSystem:
                 class_id = int(box.cls[0])
                 confidence = float(box.conf[0])
                 
+                # Only detect person (class 0)
                 if class_id == self.PERSON_CLASS_ID and confidence >= self.CONFIDENCE_THRESHOLD:
                     person_count += 1
                     max_confidence = max(max_confidence, confidence)
                     
-                    # Vẽ bounding box
+                    # Draw bounding box
                     x1, y1, x2, y2 = map(int, box.xyxy[0])
                     cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
                     
-                    # Vẽ label
+                    # Draw label
                     label = f"Person {confidence:.2f}"
-                    cv2.putText(frame, label, (x1, y1 - 10),
-                               cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                    label_size = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.6, 2)[0]
+                    cv2.rectangle(frame, (x1, y1 - label_size[1] - 10), 
+                                  (x1 + label_size[0], y1), (0, 255, 0), -1)
+                    cv2.putText(frame, label, (x1, y1 - 5),
+                               cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
         
-        # Vẽ thông tin trên frame
+        # Draw overlay info
         current_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        cv2.putText(frame, f"Time: {current_time}", (10, 30),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
-        cv2.putText(frame, f"Detected: {person_count} person(s)", (10, 60),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+        gate_state = self.gate.state
+        
+        # Status bar background
+        cv2.rectangle(frame, (0, 0), (frame.shape[1], 70), (0, 0, 0), -1)
+        
+        # Time
+        cv2.putText(frame, f"Time: {current_time}", (10, 25),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+        
+        # Detection count
+        cv2.putText(frame, f"Detected: {person_count} person(s)", (10, 50),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+        
+        # Gate status
+        gate_color = (0, 255, 0) if gate_state == "OPEN" else (0, 0, 255)
+        cv2.putText(frame, f"Gate IN: {gate_state}", (frame.shape[1] - 180, 50),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, gate_color, 2)
         
         return frame, person_count, max_confidence
     
-    def run_flask_server(self):
-        """Chạy Flask server trong thread riêng"""
+    def save_detection(self, frame, person_count, confidence):
+        """Save detection image and log to database"""
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        filename = f"person_{timestamp}.png"
+        filepath = os.path.join(self.SAVE_DIR, filename)
+        
+        # Save as PNG format
+        cv2.imwrite(filepath, frame, [cv2.IMWRITE_PNG_COMPRESSION, 3])
+        print(f"[SAVE] Đã lưu: {filename}")
+        
+        # Save to database
+        try:
+            db.add_detection(person_count, confidence, filepath)
+            print(f"[DB] Đã lưu vào database")
+        except Exception as e:
+            print(f"[DB] Lỗi lưu database: {e}")
+        
+        return filepath
+    
+    def send_telegram_alert(self, filepath, person_count, confidence):
+        """Send Telegram alert for gate opening"""
+        try:
+            success = telegram_bot.send_detection_alert(filepath, person_count, confidence)
+            if success:
+                print("[Telegram] Đã gửi thông báo")
+            return success
+        except Exception as e:
+            print(f"[Telegram] Lỗi: {e}")
+            return False
+    
+    def run_flask(self):
+        """Run Flask server in background thread"""
         self.app.run(host='0.0.0.0', port=8000, debug=False, threaded=True, use_reloader=False)
     
-    def run_detection(self, show_window=True):
-        """Chạy vòng lặp detection chính"""
-        print("🚀 Bắt đầu phát hiện...")
+    def run(self, show_window=True, camera_index=0):
+        """
+        Main detection loop
         
-        # Khởi động Flask server
-        flask_thread = threading.Thread(target=self.run_flask_server, daemon=True)
+        Args:
+            show_window: Show OpenCV window (True for local, False for headless)
+            camera_index: Camera device index (0 = default webcam)
+        """
+        print("[START] Bat dau he thong phat hien...")
+        
+        # Start Flask server
+        flask_thread = threading.Thread(target=self.run_flask, daemon=True)
         flask_thread.start()
-        print("✅ Flask server đang chạy trên port 8000")
+        print("[Flask] Server dang chay: http://localhost:8000")
         
-        # Mở camera
-        self.cap = cv2.VideoCapture(0)
-        self.cap.set(3, 640)  # Width
-        self.cap.set(4, 480)  # Height
+        # Open camera
+        cap = cv2.VideoCapture(camera_index)
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        cap.set(cv2.CAP_PROP_FPS, 30)
         
-        if not self.cap.isOpened():
-            print("❌ Không thể mở camera!")
+        if not cap.isOpened():
+            print("[ERROR] Khong the mo camera!")
             return
         
-        print("✅ Camera đã sẵn sàng")
-        print("="*50)
-        print("⚠️  Nhấn 'q' để dừng")
-        print("="*50)
+        print("[Camera] Da san sang")
+        print("=" * 50)
+        print("[INFO] Nhan 'q' de dung (trong cua so OpenCV)")
+        print("=" * 50)
+        
+        self.running = True
         
         try:
-            while True:
-                ret, frame = self.cap.read()
+            while self.running:
+                ret, frame = cap.read()
                 if not ret:
-                    print("⚠️  Không đọc được frame, đang thử lại...")
+                    print("[WARN] Khong doc duoc frame, dang thu lai...")
                     time.sleep(0.1)
                     continue
                 
-                # Xử lý frame
+                # Process frame
                 processed_frame, person_count, confidence = self.process_frame(frame)
                 
-                # Cập nhật frame cho Flask stream
-                with self.latest_frame_lock:
+                # Update realtime detection state for API
+                self.current_person_detected = person_count > 0 and confidence >= self.CONFIDENCE_THRESHOLD
+                self.current_person_count = person_count if self.current_person_detected else 0
+                self.current_confidence = confidence if self.current_person_detected else 0.0
+                
+                # Update frame for Flask streaming
+                with self.frame_lock:
                     self.frame = processed_frame.copy()
                 
-                # Xử lý phát hiện người
+                # Update gate controller - only when confidence >= threshold
+                person_detected = self.current_person_detected
+                old_state = self.gate.state
+                new_state = self.gate.update(person_detected)
+                
                 current_time = time.time()
                 
-                if person_count > 0:
-                    if not self.person_detected:
-                        # Phát hiện lần đầu
-                        self.person_detected = True
-                        self.last_detection_time = current_time
-                        print(f"🚨 PHÁT HIỆN {person_count} NGƯỜI! (Confidence: {confidence:.2f})")
-                        self.save_detection_image(processed_frame, person_count, confidence)
-                    
-                    elif current_time - self.last_detection_time >= self.RESET_TIME:
-                        # Đã qua RESET_TIME, lưu lại
-                        self.last_detection_time = current_time
-                        print(f"🚨 PHÁT HIỆN {person_count} NGƯỜI! (Confidence: {confidence:.2f})")
-                        self.save_detection_image(processed_frame, person_count, confidence)
+                # Handle Telegram: send once when detection starts (with cooldown)
+                if person_detected:
+                    # Check if we should send telegram (first detection or after cooldown)
+                    if not self.telegram_sent_for_detection:
+                        if (current_time - self.last_telegram_time) >= self.TELEGRAM_COOLDOWN:
+                            filepath = self.save_detection(processed_frame, person_count, confidence)
+                            self.send_telegram_alert(filepath, person_count, confidence)
+                            self.last_telegram_time = current_time
+                            self.telegram_sent_for_detection = True
                 else:
-                    # Reset nếu không còn người
-                    if self.person_detected:
-                        self.person_detected = False
-                        print("✅ Không còn phát hiện người")
+                    # Reset telegram flag when no detection
+                    self.telegram_sent_for_detection = False
                 
-                # Hiển thị cửa sổ OpenCV
+                # Handle gate state change logging
+                if old_state != new_state:
+                    if new_state == "OPEN":
+                        self.gate_opened_notified = True
+                    else:
+                        self.gate_opened_notified = False
+                
+                # Periodic save when person detected (every SAVE_INTERVAL seconds)
+                if person_detected and (current_time - self.last_save_time) >= self.SAVE_INTERVAL:
+                    if self.gate.state == "OPEN":
+                        self.save_detection(processed_frame, person_count, confidence)
+                        self.last_save_time = current_time
+                
+                # Show OpenCV window
                 if show_window:
                     cv2.imshow('Person Detection', processed_frame)
                     if cv2.waitKey(1) & 0xFF == ord('q'):
-                        print("\n🛑 Dừng hệ thống...")
+                        print("\n[STOP] Dung boi nguoi dung...")
                         break
-                
+        
         except KeyboardInterrupt:
-            print("\n🛑 Dừng bởi người dùng...")
+            print("\n[STOP] Dung boi Ctrl+C...")
         
         finally:
-            self.cap.release()
+            self.running = False
+            cap.release()
             cv2.destroyAllWindows()
-            print("✅ Đã dừng hệ thống")
+            self.gate.cleanup()
+            print("[DONE] Da dung he thong")
 
 
-def run_detection_system(show_window=True):
+def run_detection_system(show_window=True, camera_index=0):
     """
-    Hàm chính để chạy hệ thống phát hiện
+    Entry point to run the detection system
     
     Args:
-        show_window (bool): Hiển thị cửa sổ OpenCV hay không
+        show_window: Show OpenCV preview window
+        camera_index: Camera device index
     """
     system = PersonDetectionSystem()
-    system.run_detection(show_window=show_window)
+    system.run(show_window=show_window, camera_index=camera_index)
 
 
 if __name__ == "__main__":

@@ -885,3 +885,76 @@ tr:hover {
     overflow-y: auto;
     /* Cho phép cuộn dọc khi vượt quá */
 }
+
+/* ==========================================
+   LIGHT BULB INDICATOR (đèn báo phát hiện)
+   ========================================== */
+
+/* Container chứa đèn và countdown */
+.light-bulb-container {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Đèn indicator */
+.light-bulb {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #444, #222);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    filter: grayscale(100%) brightness(0.6);
+}
+
+/* Đèn sáng khi phát hiện người */
+.light-bulb.active {
+    background: linear-gradient(145deg, #fff176, #ffc107);
+    box-shadow: 
+        0 0 20px rgba(255, 235, 59, 0.8),
+        0 0 40px rgba(255, 193, 7, 0.6),
+        0 0 60px rgba(255, 152, 0, 0.4);
+    filter: none;
+    animation: pulse-glow 1s ease-in-out infinite;
+}
+
+/* Hiệu ứng nhấp nháy */
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 
+            0 0 20px rgba(255, 235, 59, 0.8),
+            0 0 40px rgba(255, 193, 7, 0.6),
+            0 0 60px rgba(255, 152, 0, 0.4);
+    }
+    50% {
+        box-shadow: 
+            0 0 30px rgba(255, 235, 59, 1),
+            0 0 50px rgba(255, 193, 7, 0.8),
+            0 0 80px rgba(255, 152, 0, 0.6);
+    }
+}
+
+/* Text đếm ngược */
+#countdown-text {
+    display: block;
+    font-size: 20px;
+    font-weight: bold;
+    color: #ff5722;
+    margin-top: 8px;
+    min-height: 28px;
+}
+
+/* Countdown animation */
+#countdown-text.counting {
+    animation: countdown-pulse 1s ease-in-out infinite;
+}
+
+@keyframes countdown-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
