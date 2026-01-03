@@ -17,18 +17,8 @@ Thành viên: Nguyễn Bá Thành, Võ Đức Hiếu, Hoàng Thị Hương Giang
 | **Team size nhỏ** | Không cần full Scrum ceremonies |
 | **Thời gian giới hạn** | Timeboxed phases |
 
-### So sánh Waterfall vs Scrum
-
-| Tiêu chí | Waterfall | Scrum | SMAC phù hợp? |
-|----------|-----------|-------|---------------|
-| **Yêu cầu** | Cố định, rõ ràng từ đầu | Thay đổi liên tục | Waterfall ✓ |
-| **Quy mô team** | Lớn, phân công rõ | Nhỏ, linh hoạt | Scrum ✓ |
-| **Thời gian** | Dài, sequential | Ngắn, iterative | Phụ thuộc deadline |
-| **Tài liệu** | Đầy đủ, formal | Tối thiểu | Waterfall ✓ |
-| **Testing** | Cuối dự án | Liên tục | Scrum ✓ |
-| **Rủi ro** | Phát hiện muộn | Phát hiện sớm | Scrum ✓ |
-| **Khách hàng** | Ít tham gia | Tham gia thường xuyên | Waterfall ✓ |
-| **Thay đổi** | Khó, tốn kém | Dễ, linh hoạt | Scrum ✓ |
+### Sơ đồ tổng quan hệ thống (System Overview)
+![System Overview](diagram/overview.jpg)
 
 ---
 
@@ -120,10 +110,6 @@ Hoặc sửa trực tiếp trong `src/telegram_helper.py`.
 | **11** | Portability | Cross-platform | Hỗ trợ đa nền tảng | Windows, Linux |
 | **12** | Maintainability | Modular design | Kiến trúc module hóa | Separation of concerns |
 
-
-### Sơ đồ tổng quan hệ thống (System Overview)
-![System Overview](diagram/overview.jpg)
----
 
 ## 📚 Tài liệu tham khảo
 
