@@ -2,6 +2,10 @@
 
 SMAC (Security Monitoring Access Control) là hệ thống giám sát an ninh tự động kiểm soát cổng ra vào dựa trên việc phát hiện người sử dụng trí tuệ nhân tạo (YOLO11)
 
+```
+Thành viên: Nguyễn Bá Thành, Võ Đức Hiếu, Hoàng Thị Hương Giang
+```
+
 Đối với dự án SMAC trong **môn Công nghệ Phần mềm**, tôi đề xuất sử dụng: **Hybrid Approach: Waterfall + Agile Elements**
 
 ### Lý do:
@@ -117,6 +121,10 @@ Hoặc sửa trực tiếp trong `src/telegram_helper.py`.
 | **12** | Maintainability | Modular design | Kiến trúc module hóa | Separation of concerns |
 
 
+### Sơ đồ tổng quan hệ thống (System Overview)
+![System Overview](diagram/overview.jpg)
+---
+
 ## 📚 Tài liệu tham khảo
 
 1. Sommerville, I. (2016). Software Engineering (10th Edition)
@@ -125,4 +133,3 @@ Hoặc sửa trực tiếp trong `src/telegram_helper.py`.
 4. YOLO Documentation: https://docs.ultralytics.com/
 
 ---
-

@@ -1,1 +1,84 @@
-<mxfile><diagram name="Activity Diagram - SMAC Detection Flow" id="activity-diagram">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</diagram></mxfile>
+<mxfile host="app.diagrams.net">
+  <diagram name="Activity Diagram - SMAC Detection Flow" id="activity-diagram">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" background="#FFFFFF" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="SMAC - Activity Diagram (Detection Flow)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=24;fontStyle=1;fontColor=#1a73e8;" parent="1" vertex="1">
+          <mxGeometry x="400" y="20" width="500" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="start" value="" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="640" y="80" width="40" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="a1" value="Khởi tạo hệ thống&#10;(Load YOLO, Flask, Camera)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="560" y="150" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="a2" value="Khởi động Flask Server&#10;(Port 8000)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="560" y="240" width="200" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="a3" value="Đọc Frame từ Camera" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="560" y="320" width="200" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="a4" value="Xử lý Frame với YOLO11&#10;(Person Detection)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="560" y="400" width="200" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="d1" value="Có người?&#10;(conf ≥ 0.7)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=2;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="590" y="480" width="140" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="a5" value="gate.update(True)&#10;Cập nhật timer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="800" y="490" width="150" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="a6" value="gate.update(False)&#10;Reset timer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#b85450;strokeWidth=2;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="360" y="490" width="150" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="d2" value="Timer&#10;≥ 10s?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=2;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="825" y="580" width="100" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="a7" value="Mở cổng&#10;(OPEN)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="1000" y="595" width="120" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="a8" value="Gửi Telegram Alert" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1000" y="680" width="150" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="a9" value="Lưu vào Database" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1000" y="750" width="150" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="d3" value="Timer&#10;≥ 0.5s?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=2;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="385" y="580" width="100" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="a10" value="Đóng cổng&#10;(CLOSED)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#b85450;strokeWidth=2;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="200" y="595" width="120" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="a11" value="Cập nhật Frame&#10;(Flask Streaming)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="560" y="850" width="200" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="d4" value="Tiếp tục?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=2;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="600" y="930" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="end" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="810" y="940" width="40" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" style="endArrow=block;html=1;strokeWidth=2;" parent="1" source="start" target="a1" edge="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="endArrow=block;html=1;strokeWidth=2;" parent="1" source="a1" target="a2" edge="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" style="endArrow=block;html=1;strokeWidth=2;" parent="1" source="a2" target="a3" edge="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" style="endArrow=block;html=1;strokeWidth=2;" parent="1" source="a3" target="a4" edge="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" style="endArrow=block;html=1;strokeWidth=2;" parent="1" source="a4" target="d1" edge="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="Yes" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;" parent="1" source="d1" target="a5" edge="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" value="No" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;" parent="1" source="d1" target="a6" edge="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" style="endArrow=block;html=1;strokeWidth=2;" parent="1" source="a5" target="d2" edge="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" value="Yes" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;" parent="1" source="d2" target="a7" edge="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" style="endArrow=block;html=1;strokeWidth=2;" parent="1" source="a7" target="a8" edge="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e11" style="endArrow=block;html=1;strokeWidth=2;" parent="1" source="a8" target="a9" edge="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e12" style="endArrow=block;html=1;strokeWidth=2;" parent="1" source="a6" target="d3" edge="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e13" value="Yes" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;" parent="1" source="d3" target="a10" edge="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e14" style="endArrow=block;html=1;strokeWidth=2;" parent="1" source="a9" target="a11" edge="1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1075" y="875"/></Array></mxGeometry></mxCell>
+        <mxCell id="e15" style="endArrow=block;html=1;strokeWidth=2;" parent="1" source="a10" target="a11" edge="1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="260" y="875"/></Array></mxGeometry></mxCell>
+        <mxCell id="e16" value="No" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;" parent="1" source="d2" target="a11" edge="1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="875" y="850"/><mxPoint x="760" y="850"/></Array></mxGeometry></mxCell>
+        <mxCell id="e17" value="No" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;" parent="1" source="d3" target="a11" edge="1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="435" y="850"/><mxPoint x="560" y="850"/></Array></mxGeometry></mxCell>
+        <mxCell id="e18" style="endArrow=block;html=1;strokeWidth=2;" parent="1" source="a11" target="d4" edge="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e19" value="Yes" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;curved=1;" parent="1" source="d4" target="a3" edge="1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="520" y="960"/><mxPoint x="480" y="345"/></Array></mxGeometry></mxCell>
+        <mxCell id="e20" value="No (q pressed)" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;" parent="1" source="d4" target="end" edge="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

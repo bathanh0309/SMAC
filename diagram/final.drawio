@@ -1,0 +1,195 @@
+<mxfile host="65bd71144e">
+    <diagram name="SMAC - System Overview" id="system-overview">
+        <mxGraphModel dx="1270" dy="624" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" background="none" math="0" shadow="1">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="🔐 SMAC - System Overview Diagram" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=28;fontStyle=1;fontColor=#1a73e8;" parent="1" vertex="1">
+                    <mxGeometry x="322" y="23" width="600" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="user-layer" value="👤 USER LAYER" style="swimlane;horizontal=1;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;rounded=1;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="110" width="300" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="user" value="👨‍💼 Admin/User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" parent="user-layer" vertex="1">
+                    <mxGeometry x="40" y="60" width="50" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="browser" value="🌐 Web Browser&#xa;(Desktop/Mobile)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;strokeWidth=2;fontSize=12;" parent="user-layer" vertex="1">
+                    <mxGeometry x="140" y="70" width="130" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="telegram-app" value="📱 Telegram App" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;strokeWidth=2;fontSize=12;" parent="user-layer" vertex="1">
+                    <mxGeometry x="140" y="140" width="130" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="hw-layer" value="🔧 HARDWARE LAYER" style="swimlane;horizontal=1;startSize=30;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;rounded=1;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="340" width="300" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="camera" value="📹 Webcam&#xa;(640x480, 30FPS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;strokeWidth=2;fontSize=12;" parent="hw-layer" vertex="1">
+                    <mxGeometry x="20" y="50" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="gate-hw" value="🚪 Gate Hardware&#xa;(Servo/Relay)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;strokeWidth=2;fontSize=12;dashed=1;" parent="hw-layer" vertex="1">
+                    <mxGeometry x="160" y="50" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="pc" value="💻 PC/Server&#xa;Windows/Linux" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;strokeWidth=2;fontSize=12;" parent="hw-layer" vertex="1">
+                    <mxGeometry x="90" y="130" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="backend-layer" value="⚙️ BACKEND LAYER (Python)" style="swimlane;horizontal=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;rounded=1;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="110" width="500" height="430" as="geometry"/>
+                </mxCell>
+                <mxCell id="flask" value="🌐 Flask Server&#xa;Port: 8000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#6c8ebf;strokeWidth=2;fontSize=13;fontStyle=1;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="180" y="40" width="140" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="detection-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#6c8ebf;strokeWidth=2;dashed=1;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="20" y="110" width="220" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="detection-title" value="PersonDetectionSystem" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=12;fontStyle=1;fontColor=#1565c0;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="40" y="115" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="yolo" value="🤖 YOLO11n&#xa;Person Detection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#43a047;strokeWidth=2;fontSize=11;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="40" y="145" width="160" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="frame-proc" value="🖼️ Frame Processing&#xa;OpenCV + Bounding Box" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;strokeWidth=1;fontSize=10;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="40" y="200" width="160" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="mjpeg" value="📡 MJPEG Streaming" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;strokeWidth=1;fontSize=10;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="40" y="245" width="160" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="gate-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#fb8c00;strokeWidth=2;dashed=1;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="260" y="110" width="220" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="gate-title" value="GateController" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=12;fontStyle=1;fontColor=#e65100;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="320" y="115" width="100" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="state-machine" value="🔄 State Machine&#xa;CLOSED ⇄ OPEN" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#fb8c00;strokeWidth=2;fontSize=11;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="280" y="145" width="180" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="timer" value="⏱️ Timer Logic&#xa;Open: 10s | Close: 0.5s" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;strokeWidth=1;fontSize=10;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="280" y="200" width="180" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="manual" value="🎮 Manual Control API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#fb8c00;strokeWidth=1;fontSize=10;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="280" y="245" width="180" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="telegram-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffebee;strokeColor=#e53935;strokeWidth=2;dashed=1;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="20" y="310" width="220" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="telegram-title" value="TelegramBot" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=12;fontStyle=1;fontColor=#c62828;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="80" y="315" width="100" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="alert" value="🔔 Send Alert&#xa;Photo + Caption" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#e53935;strokeWidth=1;fontSize=10;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="40" y="345" width="80" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="cooldown" value="⏰ Cooldown&#xa;30s" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e53935;strokeWidth=1;fontSize=10;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="140" y="345" width="80" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#43a047;strokeWidth=2;dashed=1;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="260" y="310" width="220" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-title" value="DetectionDatabase" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=12;fontStyle=1;fontColor=#2e7d32;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="310" y="315" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="sqlite" value="🗄️ SQLite&#xa;detections.db" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#c8e6c9;strokeColor=#43a047;strokeWidth=2;fontSize=10;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="280" y="340" width="80" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="logging" value="📝 Logging&#xa;CRUD Ops" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#43a047;strokeWidth=1;fontSize=10;" parent="backend-layer" vertex="1">
+                    <mxGeometry x="380" y="350" width="80" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="frontend-layer" value="🎨 FRONTEND LAYER" style="swimlane;horizontal=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;rounded=1;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="960" y="110" width="280" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="nodejs" value="🟢 Node.js Server&#xa;Port: 3000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#82b366;strokeWidth=2;fontSize=12;" parent="frontend-layer" vertex="1">
+                    <mxGeometry x="70" y="40" width="140" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="html" value="📄 index.html" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;strokeWidth=1;fontSize=11;" parent="frontend-layer" vertex="1">
+                    <mxGeometry x="20" y="100" width="75" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="css" value="🎨 style.css" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;strokeWidth=1;fontSize=11;" parent="frontend-layer" vertex="1">
+                    <mxGeometry x="105" y="100" width="70" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="js" value="⚡ scripts.js" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;strokeWidth=1;fontSize=11;" parent="frontend-layer" vertex="1">
+                    <mxGeometry x="185" y="100" width="75" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="dashboard" value="📊 Dashboard UI&#xa;Video | Status | Controls" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#82b366;strokeWidth=2;fontSize=11;" parent="frontend-layer" vertex="1">
+                    <mxGeometry x="40" y="145" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="external-layer" value="☁️ EXTERNAL SERVICES" style="swimlane;horizontal=1;startSize=30;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;rounded=1;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="960" y="340" width="280" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="telegram-api" value="📲 Telegram Bot API&#xa;api.telegram.org" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#b85450;strokeWidth=2;fontSize=12;" parent="external-layer" vertex="1">
+                    <mxGeometry x="60" y="50" width="160" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="github" value="🐙 GitHub Repository&#xa;github.com/bathanh0309/SMAC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;strokeWidth=1;fontSize=10;" parent="external-layer" vertex="1">
+                    <mxGeometry x="40" y="120" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="yolo-weights" value="🧠 YOLO Weights&#xa;yolo11n.pt (ultralytics)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;strokeWidth=1;fontSize=10;" parent="external-layer" vertex="1">
+                    <mxGeometry x="40" y="165" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="flow1" value="Frame" style="endArrow=block;html=1;strokeWidth=3;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" parent="1" edge="1">
+                    <mxGeometry x="-0.8348" y="9" relative="1" as="geometry">
+                        <mxPoint x="340" y="430" as="sourcePoint"/>
+                        <mxPoint x="420" y="280" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="380" y="430"/>
+                            <mxPoint x="380" y="280"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow2" value="person_detected" style="endArrow=block;html=1;strokeWidth=2;strokeColor=#fb8c00;fontSize=10;" parent="1" edge="1">
+                    <mxGeometry x="1" y="270" relative="1" as="geometry">
+                        <mxPoint x="640" y="260" as="sourcePoint"/>
+                        <mxPoint x="660" y="260" as="targetPoint"/>
+                        <mxPoint x="267" y="231" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow3" value="API" style="endArrow=block;html=1;strokeWidth=2;strokeColor=#82b366;fontSize=11;fontStyle=1;startArrow=block;startFill=1;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="900" y="180" as="sourcePoint"/>
+                        <mxPoint x="960" y="180" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow4" value="HTTP" style="endArrow=block;html=1;strokeWidth=2;strokeColor=#d6b656;fontSize=11;startArrow=block;startFill=1;exitX=0.971;exitY=0.011;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;exitPerimeter=0;" parent="1" source="user-layer" target="frontend-layer" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="340" y="200" as="sourcePoint"/>
+                        <mxPoint x="960" y="200" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="331" y="82"/>
+                            <mxPoint x="960" y="82"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow5" value="HTTPS" style="endArrow=block;html=1;strokeWidth=2;strokeColor=#b85450;fontSize=10;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1.001;exitY=0.866;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="telegram-box" target="telegram-api" edge="1">
+                    <mxGeometry x="-0.2979" y="-6" relative="1" as="geometry">
+                        <mxPoint x="621" y="564" as="sourcePoint"/>
+                        <mxPoint x="1001" y="494" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="640" y="569"/>
+                            <mxPoint x="921" y="569"/>
+                            <mxPoint x="921" y="494"/>
+                            <mxPoint x="921" y="415"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow6" value="" style="endArrow=block;html=1;strokeWidth=2;strokeColor=#b85450;dashed=1;exitX=0.995;exitY=0.04;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="external-layer" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1067" y="298" as="sourcePoint"/>
+                        <mxPoint x="310" y="208" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="1267" y="343"/>
+                            <mxPoint x="1267" y="298"/>
+                            <mxPoint x="1267" y="208"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow7" value="Signal" style="endArrow=block;html=1;strokeWidth=2;strokeColor=#9673a6;dashed=1;fontSize=10;entryX=1;entryY=0;entryDx=0;entryDy=0;" parent="1" target="hw-layer" edge="1">
+                    <mxGeometry x="0.9549" y="19" relative="1" as="geometry">
+                        <mxPoint x="660" y="305" as="sourcePoint"/>
+                        <mxPoint x="340" y="325.0000000000001" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="340" y="305"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
