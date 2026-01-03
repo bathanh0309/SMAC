@@ -34,3 +34,6 @@ node_modules/
 
 # VS Code
 .vscode/
+
+run.bat
+deploy.bat
