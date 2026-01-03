@@ -84,9 +84,7 @@ Hoặc sửa trực tiếp trong `src/telegram_helper.py`.
 - **OPEN**: Phát hiện người liên tục >= 5 giây
 - **CLOSE**: Không có người >= 2 giây (debounce)
 
-## 2. Yêu cầu chức năng (Functional Requirements)
-
-### 2.1 Bảng tổng hợp yêu cầu chức năng
+## Yêu cầu chức năng (Functional Requirements)
 
 | ID | Yêu cầu | Mô tả | Độ ưu tiên |
 |----|---------|-------|------------|
@@ -101,9 +99,7 @@ Hoặc sửa trực tiếp trong `src/telegram_helper.py`.
 | **09** | Lưu ảnh phát hiện | Lưu ảnh khi phát hiện người (mỗi 10s) | Thấp |
 | **10** | Countdown timer | Hiển thị thời gian đếm ngược trước khi mở cổng | Thấp |
 
-## 3. Yêu cầu phi chức năng (Non-functional Requirements)
-
-### 3.1 Bảng tổng hợp yêu cầu phi chức năng
+## Yêu cầu phi chức năng (Non-functional Requirements)
 
 | ID | Loại | Yêu cầu | Mô tả | Metric |
 |----|------|---------|-------|--------|
