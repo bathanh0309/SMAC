@@ -1,0 +1,156 @@
+<mxfile host="65bd71144e">
+    <diagram name="Sequence Diagram - Person Detection" id="sequence-diagram">
+        <mxGraphModel dx="1997" dy="832" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="SMAC - Sequence Diagram (Person Detection Flow)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=22;fontStyle=1;fontColor=#1a73e8;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="20" width="500" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="user" value="User/Browser" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;participant=umlActor;size=40;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="80" width="80" height="900" as="geometry"/>
+                </mxCell>
+                <mxCell id="flask" value="Flask Server&#xa;:8000" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;size=40;" parent="1" vertex="1">
+                    <mxGeometry x="240" y="80" width="100" height="900" as="geometry"/>
+                </mxCell>
+                <mxCell id="detection" value="PersonDetection&#xa;System" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;size=40;" parent="1" vertex="1">
+                    <mxGeometry x="420" y="80" width="120" height="900" as="geometry"/>
+                </mxCell>
+                <mxCell id="yolo" value="YOLO11&#xa;Model" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;size=40;" parent="1" vertex="1">
+                    <mxGeometry x="600" y="80" width="100" height="900" as="geometry"/>
+                </mxCell>
+                <mxCell id="gate" value="GateController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;size=40;" parent="1" vertex="1">
+                    <mxGeometry x="760" y="80" width="100" height="900" as="geometry"/>
+                </mxCell>
+                <mxCell id="telegram" value="TelegramBot" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;size=40;" parent="1" vertex="1">
+                    <mxGeometry x="920" y="80" width="100" height="900" as="geometry"/>
+                </mxCell>
+                <mxCell id="db" value="Database&#xa;SQLite" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;size=40;" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="80" width="100" height="900" as="geometry"/>
+                </mxCell>
+                <mxCell id="m1" value="GET /video_feed" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;entryX=0;entryY=0;" parent="1" edge="1">
+                    <mxGeometry x="-0.2" relative="1" as="geometry">
+                        <mxPoint x="120" y="180" as="sourcePoint"/>
+                        <mxPoint x="280" y="180" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m2" value="_generate_frames()" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="300" y="210" as="sourcePoint"/>
+                        <mxPoint x="470" y="210" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="loop1" value="loop [while running]" style="shape=umlFrame;whiteSpace=wrap;html=1;width=140;height=25;boundedLbl=1;verticalAlign=middle;align=center;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="226" width="1100" height="535" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3" value="cap.read()" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;dashed=1;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="480" y="242" as="sourcePoint"/>
+                        <mxPoint x="480" y="272" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="520" y="242"/>
+                            <mxPoint x="520" y="272"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m3l" value="frame" style="text;html=1;align=center;fontSize=10;fontStyle=2;" parent="1" vertex="1">
+                    <mxGeometry x="514" y="256" width="50" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4" value="process_frame(frame)" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="490" y="302" as="sourcePoint"/>
+                        <mxPoint x="640" y="302" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m5" value="model(frame)" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="640" y="322" as="sourcePoint"/>
+                        <mxPoint x="640" y="362" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="680" y="322"/>
+                            <mxPoint x="680" y="362"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m6" value="boxes, confidence" style="endArrow=open;html=1;strokeWidth=2;fontSize=11;dashed=1;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="640" y="382" as="sourcePoint"/>
+                        <mxPoint x="490" y="382" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="alt1" value="alt [person_detected = True, conf ≥ 0.7]" style="shape=umlFrame;whiteSpace=wrap;html=1;width=240;height=25;boundedLbl=1;verticalAlign=middle;align=center;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="420" y="399" width="750" height="280" as="geometry"/>
+                </mxCell>
+                <mxCell id="m7" value="update(True)" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="490" y="452" as="sourcePoint"/>
+                        <mxPoint x="800" y="452" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m8" value="state (OPEN/CLOSED)" style="endArrow=open;html=1;strokeWidth=2;fontSize=11;dashed=1;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="800" y="482" as="sourcePoint"/>
+                        <mxPoint x="490" y="482" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m9" value="send_detection_alert()" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="490" y="522" as="sourcePoint"/>
+                        <mxPoint x="960" y="522" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m10" value="POST /sendPhoto" style="endArrow=block;html=1;strokeWidth=2;fontSize=10;dashed=1;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="970" y="542" as="sourcePoint"/>
+                        <mxPoint x="1050" y="542" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m10l" value="Telegram API" style="text;html=1;align=center;fontSize=9;fontStyle=2;" parent="1" vertex="1">
+                    <mxGeometry x="1040" y="547" width="70" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="m11" value="success" style="endArrow=open;html=1;strokeWidth=2;fontSize=10;dashed=1;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="960" y="572" as="sourcePoint"/>
+                        <mxPoint x="490" y="572" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m12" value="add_detection()" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="490" y="612" as="sourcePoint"/>
+                        <mxPoint x="1120" y="612" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m13" value="record_id" style="endArrow=open;html=1;strokeWidth=2;fontSize=11;dashed=1;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1120" y="652" as="sourcePoint"/>
+                        <mxPoint x="490" y="652" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="else1" value="[else: person_detected = False]" style="line;strokeWidth=1;html=1;dashed=1;dashPattern=8 8;fillColor=none;fontSize=10;fontStyle=2;" parent="1" vertex="1">
+                    <mxGeometry x="430" y="702" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="m14" value="update(False)" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="490" y="742" as="sourcePoint"/>
+                        <mxPoint x="800" y="742" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m15" value="MJPEG frame" style="endArrow=open;html=1;strokeWidth=2;fontSize=11;dashed=1;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="470" y="782" as="sourcePoint"/>
+                        <mxPoint x="300" y="782" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m16" value="video stream" style="endArrow=open;html=1;strokeWidth=2;fontSize=11;dashed=1;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="280" y="801" as="sourcePoint"/>
+                        <mxPoint x="120" y="801" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="note1" value="📝 Cooldown: 30s giữa các Telegram" style="shape=note;strokeWidth=1;fontSize=10;size=15;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" parent="1" vertex="1">
+                    <mxGeometry x="1000" y="165" width="180" height="35" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

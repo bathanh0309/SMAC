@@ -1,0 +1,84 @@
+<mxfile host="65bd71144e">
+    <diagram name="State Diagram - SMAC Gate Controller" id="state-diagram">
+        <mxGraphModel dx="1088" dy="665" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="SMAC - State Diagram (Gate Controller)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=24;fontStyle=1;fontColor=#1a73e8;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="161" width="500" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="initial" value="" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="124" width="40" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="closed" value="🔒 CLOSED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#b85450;strokeWidth=3;fontSize=18;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="220" width="200" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="open" value="🚪 OPEN" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=3;fontSize=18;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="720" y="220" width="200" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="waiting" value="⏳ Counting...&#xa;(10s countdown)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=14;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="423" width="200" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="debounce" value="⏱️ Debounce&#xa;(0.5s delay)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;fontSize=14;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="720" y="420" width="200" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="t1" value="Init" style="endArrow=block;html=1;strokeWidth=2;fontSize=12;fontStyle=1;" parent="1" source="initial" target="closed" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="t2" value="person = True" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="361" y="320" as="sourcePoint"/>
+                        <mxPoint x="361" y="423" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="t3" value="person = False&#xa;[reset timer]" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;entryX=0.25;entryY=1;curved=1;entryDx=0;entryDy=0;" parent="1" target="closed" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="270" y="421" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="t4" value="elapsed ≥ 10s" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;entryX=0;entryY=0.7;fillColor=#d5e8d4;strokeColor=#82b366;exitX=1;exitY=0;exitDx=0;exitDy=0;" parent="1" source="waiting" target="open" edge="1">
+                    <mxGeometry x="-0.6877" y="-35" relative="1" as="geometry">
+                        <mxPoint x="438" y="357" as="sourcePoint"/>
+                        <Array as="points">
+                            <mxPoint x="445" y="349"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="t5" value="person = False" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="771" y="320" as="sourcePoint"/>
+                        <mxPoint x="771" y="420" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="t6" value="person = True&#xa;[reset]" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;curved=1;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="860" y="417" as="sourcePoint"/>
+                        <mxPoint x="860" y="322" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="t7" value="elapsed ≥ 0.5s" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;exitX=0;exitY=0;entryX=1;entryY=0.7;fillColor=#ffcccc;strokeColor=#b85450;exitDx=0;exitDy=0;" parent="1" source="debounce" target="closed" edge="1">
+                    <mxGeometry x="-0.4897" y="27" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="717" y="363"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="force1" value="force_open()" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;dashed=1;exitX=1;exitY=0.3;entryX=0;entryY=0.3;strokeColor=#6c8ebf;" parent="1" source="closed" target="open" edge="1">
+                    <mxGeometry y="-14" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="force2" value="force_close()" style="endArrow=block;html=1;strokeWidth=2;fontSize=11;dashed=1;exitX=0;exitY=0.3;entryX=1;entryY=0.3;strokeColor=#6c8ebf;" parent="1" source="open" target="closed" edge="1">
+                    <mxGeometry x="0.0067" y="-28" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="note" value="OPEN_DELAY = 10s&#xa;CLOSE_DELAY = 0.5s&#xa;CONFIDENCE ≥ 0.7" style="shape=note;strokeWidth=2;fontSize=12;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="423" width="180" height="80" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
